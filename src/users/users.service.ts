@@ -1,8 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Hash } from '@src/utils/hash';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserDto } from './dto/user.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -12,8 +18,40 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(createUserDto: CreateUserDto): Promise<boolean> {
+    try {
+      createUserDto.password = await Hash.encrypt(createUserDto.password);
+      await this.usersRepository.save(createUserDto);
+      return true;
+    } catch (err) {
+      console.log(err);
+      throw new ConflictException('문제가 발생했습니다');
+    }
+  }
+
+  async login(
+    userDto: UserDto,
+    session: Record<string, any>,
+  ): Promise<boolean> {
+    try {
+      const { username, password } = userDto;
+      const user: User = await this.usersRepository
+        .createQueryBuilder('user')
+        .select(['user.password', 'user.username', 'user.id'])
+        .where('user.username = :username ', { username })
+        .getOne();
+
+      if (user?.password) {
+        if (Hash.validate(user.password, password)) {
+          session.user_id = user.id;
+          return true;
+        }
+      }
+      throw new UnauthorizedException('ID와 비밀번호를 확인하세요');
+    } catch (err) {
+      console.log(err);
+      throw new UnauthorizedException('ID와 비밀번호를 확인하세요');
+    }
   }
 
   findAll() {
