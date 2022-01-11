@@ -10,6 +10,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { BoardCategory } from './board-category';
 
 @Entity()
 export class Board {
@@ -34,6 +35,10 @@ export class Board {
   @ManyToOne(() => User, (user) => user.boards)
   @JoinColumn({ name: 'user_id' })
   user: number;
+
+  @ManyToOne(() => BoardCategory, (category) => category.boards)
+  @JoinColumn({ name: 'category_id' })
+  categoryId: number;
 
   @OneToMany(() => Comment, (comment) => comment.board)
   comments: Comment[];
