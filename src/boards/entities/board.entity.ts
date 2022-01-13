@@ -32,11 +32,13 @@ export class Board {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @ManyToOne(() => User, (user) => user.boards)
+  @ManyToOne(() => User, (user) => user.boards, { nullable: false })
   @JoinColumn({ name: 'user_id' })
   user: number;
 
-  @ManyToOne(() => BoardCategory, (category) => category.boards)
+  @ManyToOne(() => BoardCategory, (category) => category.boards, {
+    nullable: false,
+  })
   @JoinColumn({ name: 'category_id' })
   categoryId: number;
 
