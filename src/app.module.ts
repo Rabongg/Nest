@@ -6,8 +6,10 @@ import { BoardsModule } from './boards/boards.module';
 import { CommentsModule } from './comments/comments.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ChatGateway } from './chat.gateway';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
-console.log(process.env.NODE_ENV);
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -29,11 +31,19 @@ console.log(process.env.NODE_ENV);
       synchronize: true,
       autoLoadEntities: true,
     }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'client'),
+      serveRoot: '/static',
+      serveStaticOptions: {
+        extensions: ['html'],
+        index: false,
+      },
+    }),
     UsersModule,
     BoardsModule,
     CommentsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ChatGateway],
 })
 export class AppModule {}

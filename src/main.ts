@@ -28,6 +28,12 @@ async function bootstrap() {
       },
     }),
   );
+
+  app.enableCors();
+  // app.enableCors({
+  //   origin: 'http://localhost:8100',
+  //   credentials: true,
+  // });
   await app.listen(3000);
 }
 bootstrap();
