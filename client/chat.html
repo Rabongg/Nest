@@ -17,7 +17,7 @@
 			const socket = io('http://localhost:8100/chat');
 			const nickname = prompt('닉네임을 알려주세요.');
 			const room = prompt('입장할 방의 코드를 적어주세요.');
-			if (!(nickname && room)) {
+      if (!(nickname && room)) {
 				alert('다시 입력해주세요.')
 				window.location.reload();
 			}
@@ -29,11 +29,18 @@
 					$('#chatList').append(`<div>${data[0]} : ${data[1]}</div>`);
 				});
 				/* 입장 시*/
-				socket.on(`entrance(${room})`, (userData, users) => {
+				socket.on('enter', (userData, users) => {
           $('#userNumber').text(`현재 방 인원수: ${users}`);
 					$('#chatList').append(`<div style="color:blue;">${userData}</div>`);
 				});
+
+        socket.on('exit', (userData, users) => {
+          $('#userNumber').text(`현재 방 인원수: ${users}`);
+          $('#chatList').append(`<div style="color:red;">${userData}</div>`);
+        });
 			});
+
+      socket.on('disconnect', () => {});
   
 			function msg_send() {
 				/* 메시지 전송 */
