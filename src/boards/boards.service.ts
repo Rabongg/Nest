@@ -1,5 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { MyLogger } from '@src/logger/my-logger.service';
 import { Repository } from 'typeorm';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
@@ -11,6 +12,7 @@ export class BoardsService {
   constructor(
     @InjectRepository(Board)
     private readonly boardsRepository: Repository<Board>,
+    private readonly loggerService: MyLogger,
   ) {}
 
   async create(
@@ -24,7 +26,7 @@ export class BoardsService {
       });
       return true;
     } catch (err) {
-      console.log(err);
+      this.loggerService.error(err);
       throw new ConflictException('문제가 발생했습니다');
     }
   }
@@ -76,7 +78,7 @@ export class BoardsService {
         .execute();
       return true;
     } catch (err) {
-      console.log(err);
+      this.loggerService.error(err);
       throw new ConflictException('문제가 발생했습니다');
     }
   }

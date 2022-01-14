@@ -4,6 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { MyLogger } from '@src/logger/my-logger.service';
 import { Hash } from '@src/utils/hash';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -16,6 +17,7 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    private readonly loggerService: MyLogger,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<boolean> {
@@ -24,7 +26,7 @@ export class UsersService {
       await this.usersRepository.save(createUserDto);
       return true;
     } catch (err) {
-      console.log(err);
+      this.loggerService.error(err);
       throw new ConflictException('문제가 발생했습니다');
     }
   }
