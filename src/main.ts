@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import * as session from 'express-session';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -29,11 +30,15 @@ async function bootstrap() {
     }),
   );
 
-  app.enableCors();
-  // app.enableCors({
-  //   origin: 'http://localhost:8100',
-  //   credentials: true,
-  // });
+  const config = new DocumentBuilder()
+    .setTitle('Fanta API')
+    .setDescription('The Fanta API description')
+    .setVersion('1.0')
+    .addTag('Fanta')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+
   await app.listen(3000);
 }
 bootstrap();
