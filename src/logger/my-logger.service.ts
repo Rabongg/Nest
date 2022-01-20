@@ -23,10 +23,12 @@ export class MyLogger implements LoggerService {
           filename: `error(${moment(new Date()).format('YYYY.MM.DD')}).log`,
           dirname: 'logs',
           maxsize: 5000000,
+          silent: process.env.NODE_ENV === 'test',
         }),
         new winston.transports.Console({
           level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
           format: combine(utilities.format.nestLike()),
+          silent: process.env.NODE_ENV === 'test',
         }),
 
         new winston.transports.File({
@@ -35,6 +37,7 @@ export class MyLogger implements LoggerService {
           )}).log`,
           dirname: 'logs',
           maxsize: 5000000,
+          silent: process.env.NODE_ENV === 'test',
         }),
       ],
     });
