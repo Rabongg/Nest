@@ -18,7 +18,7 @@ async function bootstrap() {
 
   app.use(
     session({
-      name: 'Fanta',
+      name: 'whale',
       secret: 'An0+n4lh2Ag1tEAs9ad1',
       resave: false,
       saveUninitialized: false,
