@@ -44,7 +44,7 @@ export class UsersService {
         .getOne();
 
       if (user?.password) {
-        if (Hash.validate(user.password, password)) {
+        if (await Hash.validate(user.password, password)) {
           session.user_id = user.id;
           return true;
         }
