@@ -3,6 +3,7 @@ import {
   Module,
   NestModule,
   RequestMethod,
+  Inject,
 } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -16,6 +17,11 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { LoggerMiddleware } from './logger/logger.middleware';
 import { MyLogger } from './logger/my-logger.service';
+import { RedisClient } from 'redis';
+import { RedisModule } from './redis/redis.module';
+import { REDIS } from './redis/redis.constants';
+import * as session from 'express-session';
+import * as RedisStore from 'connect-redis';
 
 @Module({
   imports: [
@@ -49,14 +55,30 @@ import { MyLogger } from './logger/my-logger.service';
     UsersModule,
     BoardsModule,
     CommentsModule,
+    RedisModule,
   ],
   controllers: [AppController],
   providers: [AppService, ChatGateway, MyLogger],
 })
 export class AppModule implements NestModule {
+  constructor(@Inject(REDIS) private readonly redis: RedisClient) {}
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(LoggerMiddleware)
+      .apply(
+        session({
+          store: new (RedisStore(session))({ client: this.redis }),
+          name: 'whale',
+          secret: 'An0+n4lh2Ag1tEAs9ad1',
+          resave: false,
+          saveUninitialized: false,
+          cookie: {
+            maxAge: 1000 * 60 * 60 * 3,
+            httpOnly: true,
+            sameSite: 'strict',
+          },
+        }),
+        LoggerMiddleware,
+      )
       .forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }
