@@ -9,5 +9,6 @@ import { MyLogger } from '@src/logger/my-logger.service';
   imports: [TypeOrmModule.forFeature([User])],
   controllers: [UsersController],
   providers: [UsersService, MyLogger],
+  exports: [UsersService],
 })
 export class UsersModule {}

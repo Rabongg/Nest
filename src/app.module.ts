@@ -20,6 +20,7 @@ import { MyLogger } from './logger/my-logger.service';
 import { RedisClient } from 'redis';
 import { RedisModule } from './redis/redis.module';
 import { REDIS } from './redis/redis.constants';
+import { AuthModule } from './auth/auth.module';
 import * as session from 'express-session';
 import * as RedisStore from 'connect-redis';
 
@@ -56,6 +57,7 @@ import * as RedisStore from 'connect-redis';
     BoardsModule,
     CommentsModule,
     RedisModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService, ChatGateway, MyLogger],
