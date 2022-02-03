@@ -19,7 +19,7 @@ export class GoogleStrategy
 
   constructor(configService: ConfigService, private moduleRef: ModuleRef) {
     super({
-      clientID: configService.get<string>('GOOGLE_KEY'),
+      clientID: configService.get<string>('GOOGLE_CLIENT_ID'),
       clientSecret: configService.get<string>('GOOGLE_SECRET'),
       callbackURL: configService.get<string>('GOOGLE_REDIRECT_URL'),
       scope: ['email', 'profile'],
@@ -36,7 +36,6 @@ export class GoogleStrategy
     done: VerifyCallback,
   ) {
     try {
-      console.log(profile);
       const user = await this.usersService.findOne({
         username: profile.id,
         provider: LoginProvider.GOOGLE,

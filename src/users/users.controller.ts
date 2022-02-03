@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Session,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,6 +20,8 @@ import {
   ApiUnauthorizedResponse,
   ApiConflictResponse,
 } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { VerifyTokenGuard } from '@src/verify-token.guard';
 
 @Controller('users')
 @ApiTags('유저 API')
@@ -36,6 +39,7 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
+  @UseGuards(VerifyTokenGuard)
   @ApiOperation({
     summary: '유저 정보 확인',
     description: 'session 정보 확인',
