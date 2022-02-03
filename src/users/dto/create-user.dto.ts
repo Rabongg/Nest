@@ -1,21 +1,12 @@
-import { IsString, IsEmail, Length } from 'class-validator';
+import { IsString, IsEmail, Length, IsEnum } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { LoginProvider } from '../entities/user.entity';
 
 export class CreateUserDto {
   @IsString()
   @Length(3, 10)
   @ApiProperty({ description: '아이디' })
   username: string;
-
-  @IsString()
-  @Length(8, 50)
-  @ApiProperty({ description: '비밀번호' })
-  password: string;
-
-  @IsString()
-  @Length(2, 4)
-  @ApiProperty({ description: '이름' })
-  name: string;
 
   @IsString()
   @Length(1, 20)
@@ -26,4 +17,8 @@ export class CreateUserDto {
   @Length(7, 50)
   @ApiProperty({ description: '이메일' })
   email: string;
+
+  @IsEnum(LoginProvider)
+  @ApiProperty({ description: '로그인 플랫폼' })
+  provider: LoginProvider;
 }

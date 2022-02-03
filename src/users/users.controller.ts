@@ -36,16 +36,13 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @ApiOperation({ summary: '로그인', description: '로그인 하기' })
-  @ApiUnauthorizedResponse({ description: '아이디 또는 비밀번호가 틀립니다.' })
-  @Post()
-  login(@Body() userDto: UserDto, @Session() session: Record<string, any>) {
-    return this.usersService.login(userDto, session);
-  }
-
+  @ApiOperation({
+    summary: '유저 정보 확인',
+    description: 'session 정보 확인',
+  })
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  findMyInfo(@Session() session: Record<string, any>) {
+    return this.usersService.findMyInfo(session);
   }
 
   @Patch(':id')

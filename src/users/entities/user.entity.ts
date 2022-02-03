@@ -9,6 +9,12 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+export enum LoginProvider {
+  KAKAO = 'kakao',
+  NAVER = 'naver',
+  GOOGLE = 'google',
+}
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -16,27 +22,14 @@ export class User {
 
   @Column({
     type: 'varchar',
-    length: 20,
+    length: 30,
     unique: true,
   })
   username: string;
 
   @Column({
     type: 'varchar',
-    length: 100,
-  })
-  password: string;
-
-  @Column({
-    type: 'varchar',
-    length: 10,
-  })
-  name: string;
-
-  @Column({
-    type: 'varchar',
     length: 20,
-    unique: true,
   })
   nickname: string;
 
@@ -46,6 +39,12 @@ export class User {
     unique: true,
   })
   email: string;
+
+  @Column({
+    type: 'enum',
+    enum: LoginProvider,
+  })
+  provider: LoginProvider;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

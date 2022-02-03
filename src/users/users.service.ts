@@ -20,48 +20,22 @@ export class UsersService {
     private readonly loggerService: MyLogger,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<boolean> {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     try {
-      createUserDto.password = await Hash.encrypt(createUserDto.password);
-      await this.usersRepository.save(createUserDto);
-      return true;
+      const user = await this.usersRepository.save(createUserDto);
+      return user;
     } catch (err) {
       this.loggerService.error(err);
       throw new ConflictException('문제가 발생했습니다');
     }
   }
 
-  async login(
-    userDto: UserDto,
-    session: Record<string, any>,
-  ): Promise<boolean> {
-    try {
-      const { username, password } = userDto;
-      const user: User = await this.usersRepository
-        .createQueryBuilder('user')
-        .select(['user.password', 'user.username', 'user.id'])
-        .where('user.username = :username ', { username })
-        .getOne();
-
-      if (user?.password) {
-        if (await Hash.validate(user.password, password)) {
-          session.user_id = user.id;
-          return true;
-        }
-      }
-      throw new UnauthorizedException('ID와 비밀번호를 확인하세요');
-    } catch (err) {
-      console.log(err);
-      throw new UnauthorizedException('ID와 비밀번호를 확인하세요');
-    }
+  findMyInfo(session) {
+    return session;
   }
 
-  findAll() {
-    return `This action returns all users`;
-  }
-
-  async findOne(username: string): Promise<User | undefined> {
-    return await this.usersRepository.findOne(username);
+  async findOne(user: UserDto): Promise<User | undefined> {
+    return await this.usersRepository.findOne(user);
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
