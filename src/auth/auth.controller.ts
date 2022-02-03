@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import {
   Controller,
   Post,
@@ -9,7 +10,6 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { UserDto } from './dto/user.dto';
 
 @Controller('auth')
 @ApiTags('auth API')
@@ -26,19 +26,56 @@ export class AuthController {
   }
 
   @UseGuards(AuthGuard('kakao'))
-  @ApiOperation({})
-  @Get('/kakao')
-  async kakaoLogin() {
-    return;
-  }
-
-  @UseGuards(AuthGuard('kakao'))
   @ApiOperation({
     summary: '카카오 로그인',
     description: 'passport를 이용해 카카오 로그인 하기',
   })
+  @Get('/kakao')
+  async kakao() {}
+
+  @UseGuards(AuthGuard('kakao'))
+  @ApiOperation({
+    summary: '카카오 로그인 redirect url',
+    description: '카카오 로그인 redirect url',
+  })
   @Get('/kakao/oauth')
-  async kakao(@Request() req) {
+  async kakaoLogin(@Request() req) {
     return this.authService.kakaoLogin(req);
+  }
+
+  @UseGuards(AuthGuard('google'))
+  @ApiOperation({
+    summary: '구글 로그인',
+    description: 'passport를 이용해 구글 로그인 하기',
+  })
+  @Get('/google')
+  async google() {}
+
+  @UseGuards(AuthGuard('google'))
+  @ApiOperation({
+    summary: '구글 로그인 redirect url',
+    description: '구글 로그인 redirect url',
+  })
+  @Get('/google/oauth')
+  async googleLogin(@Request() req) {
+    return this.authService.googleLogin(req);
+  }
+
+  @UseGuards(AuthGuard('naver'))
+  @ApiOperation({
+    summary: '네이버 로그인',
+    description: 'passport를 이용해 네이버 로그인 하기',
+  })
+  @Get('/naver')
+  async naver() {}
+
+  @UseGuards(AuthGuard('naver'))
+  @ApiOperation({
+    summary: '네이버 로그인 redirect url',
+    description: '네이버 로그인 redirect url',
+  })
+  @Get('/naver/oauth')
+  async naverLogin(@Request() req) {
+    return this.authService.naverLogin(req);
   }
 }
