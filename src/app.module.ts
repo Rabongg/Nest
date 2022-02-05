@@ -23,6 +23,7 @@ import { REDIS } from './redis/redis.constants';
 import { AuthModule } from './auth/auth.module';
 import * as session from 'express-session';
 import * as RedisStore from 'connect-redis';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
@@ -45,6 +46,10 @@ import * as RedisStore from 'connect-redis';
       synchronize: true,
       autoLoadEntities: true,
     }),
+    MongooseModule.forRoot(
+      `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}`,
+      { dbName: process.env.MONGO_DATABASE },
+    ),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'client'),
       serveRoot: '/static',
