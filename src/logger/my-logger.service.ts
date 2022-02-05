@@ -27,7 +27,13 @@ export class MyLogger implements LoggerService {
         }),
         new winston.transports.Console({
           level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
-          format: combine(utilities.format.nestLike()),
+          format: winston.format.combine(
+            winston.format.colorize({ all: true }),
+            winston.format.timestamp({ format: 'YYYY/MM/DD HH:mm:ss' }),
+            winston.format.printf(
+              (info) => `[${info.timestamp}] ${info.level}: ${info.message}`,
+            ),
+          ),
           silent: process.env.NODE_ENV === 'test',
         }),
 
@@ -61,5 +67,9 @@ export class MyLogger implements LoggerService {
 
   verbose(message: string) {
     this.logger.verbose(message);
+  }
+
+  stream(message: string) {
+    this.logger.info(message);
   }
 }
