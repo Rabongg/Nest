@@ -15,6 +15,11 @@ async function bootstrap() {
     }),
   );
 
+  app.enableCors({
+    origin: ['http://localhost:5000', 'http://localhost:8000'],
+    credentials: true,
+  });
+
   const config = new DocumentBuilder()
     .setTitle('Whale API')
     .setDescription('The Whale API description')
@@ -24,6 +29,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(3000);
+  await app.listen(7000);
 }
 bootstrap();
