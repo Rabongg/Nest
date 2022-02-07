@@ -13,7 +13,7 @@ import {
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
-import { BoardCategoryType } from './entities/board-category';
+import { BoardCategoryType } from './entities/board-category.entity';
 
 @Controller('boards')
 export class BoardsController {

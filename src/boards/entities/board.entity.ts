@@ -10,7 +10,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { BoardCategory } from './board-category';
+import { BoardCategory } from './board-category.entity';
 
 @Entity()
 export class Board {

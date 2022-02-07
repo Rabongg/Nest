@@ -5,7 +5,7 @@ import { MyLogger } from '@src/logger/my-logger.service';
 import { Repository } from 'typeorm';
 import { BoardsController } from './boards.controller';
 import { BoardsService } from './boards.service';
-import { BoardCategoryType } from './entities/board-category';
+import { BoardCategoryType } from './entities/board-category.entity';
 import { Board } from './entities/board.entity';
 
 const MockBoardRepository = () => ({
