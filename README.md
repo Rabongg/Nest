@@ -18,6 +18,9 @@ $ yarn
 $ yarn start:dev
 ```
 
+- swagger document
+http://localhost:7000/api
+
 ------------
 ## 연동
 ### 로그인
