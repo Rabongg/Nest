@@ -1,17 +1,13 @@
 import { IsString, Length } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateMessageDto {
+export class JoinChatDto {
   @IsString()
   @Length(1, 50)
   @ApiProperty({ description: '채팅방 이름' })
-  chat: string;
+  chat_id: string;
 
   @IsString()
-  @ApiProperty({ description: '송신자' })
-  sender: string;
-
-  @IsString()
-  @ApiProperty({ description: '메시지' })
-  message: string;
+  @ApiProperty({ description: '유저 이름' })
+  user: string;
 }
