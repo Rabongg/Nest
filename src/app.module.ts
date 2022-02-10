@@ -12,7 +12,7 @@ import { BoardsModule } from './boards/boards.module';
 import { CommentsModule } from './comments/comments.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ChatGateway } from './chat/chat.gateway';
+import { ChatsModule } from './chat/chat.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { LoggerMiddleware } from './logger/logger.middleware';
@@ -63,9 +63,10 @@ import { MongooseModule } from '@nestjs/mongoose';
     CommentsModule,
     RedisModule,
     AuthModule,
+    ChatsModule,
   ],
   controllers: [AppController],
-  providers: [AppService, ChatGateway, MyLogger],
+  providers: [AppService, MyLogger],
 })
 export class AppModule implements NestModule {
   constructor(@Inject(REDIS) private readonly redis: RedisClient) {}

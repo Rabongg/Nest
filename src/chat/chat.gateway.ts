@@ -8,9 +8,12 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { cachedDataVersionTag } from 'v8';
+import { ChatsService } from './chat.service';
 
 @WebSocketGateway(8100, { namespace: 'chat', cors: true })
 export class ChatGateway implements OnGatewayConnection {
+  constructor(private readonly chatService: ChatsService) {}
   @WebSocketServer() server: Server;
 
   public users = {};
@@ -35,6 +38,7 @@ export class ChatGateway implements OnGatewayConnection {
     const [nickname, room]: string[] = data;
     console.log(`${nickname}님이 코드: ${room}방에 접속했습니다.`);
     const userData = `${nickname}님이 입장했습니다.`;
+    this.chatService.createChatRoom({ name: room, user: nickname });
     client.join(room);
     client.data.nickname = nickname;
     client.data.roomNumber = room;

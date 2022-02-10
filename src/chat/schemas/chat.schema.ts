@@ -11,8 +11,7 @@ export class Chat {
   @Prop(
     raw([
       {
-        name: { type: String, required: true },
-        timestamp: { type: Date, required: true, auto: true },
+        name: { type: String, required: true, unique: true },
       },
     ]),
   )
