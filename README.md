@@ -29,6 +29,6 @@ http://localhost:7000/api
 - 구글
 
 ### 데이터베이스
-- Redis 5.x
-- Mysql 8.X
-- MongoDB
+- Redis 5.0.7
+- Mysql 8.0.28
+- MongoDB 4.4.12
