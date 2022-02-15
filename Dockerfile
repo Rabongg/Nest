@@ -1,5 +1,5 @@
 FROM node:16-alpine
-RUN apk update
+ENV NODE_ENV test
 COPY ./ /home/nest/
 WORKDIR /home/nest
 RUN yarn

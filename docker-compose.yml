@@ -1,24 +1,29 @@
-version: "3.5"
+version: "3.7"
 services:
   web:
     build:
       context: .
       dockerfile: Dockerfile
-    image: testNest:app
     depends_on:
       - mysql
       - redis
       - mongodb
     ports:
       - "80:7000"
+      - "8100:8100"
+    image: nest_web
   mysql:
     container_name: nest-mysql
-    image: mysql:8.0.28
+    image: mysql
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_USER: user
       MYSQL_PASSWORD: password1
       MYSQL_DATABASE: test
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql:/var/lib/mysql
   redis:
     container_name: nest-redis
     image: redis:5.0
@@ -26,8 +31,16 @@ services:
       - "6379:6379"
   mongodb:
     container_name: nest-mongo
-    image: mongo:4.4.12
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: rabong
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: chat
     ports:
       - "27017:27017"
-networks:
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - mongo:/data/db
 volumes:
+  mongo:
+  mysql:
