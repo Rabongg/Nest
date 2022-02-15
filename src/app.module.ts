@@ -29,9 +29,11 @@ import { MongooseModule } from '@nestjs/mongoose';
   imports: [
     ConfigModule.forRoot({
       envFilePath:
-        process.env.NODE_ENV !== 'production'
-          ? '.env.development'
-          : '.env.production',
+        process.env.NODE_ENV === 'test'
+          ? '.env.test'
+          : process.env.NODE_ENV === 'production'
+          ? '.env.production'
+          : '.env.development',
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
