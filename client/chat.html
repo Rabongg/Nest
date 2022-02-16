@@ -21,7 +21,7 @@
 				alert('다시 입력해주세요.')
 				window.location.reload();
 			}
-			socket.emit('entrance', nickname, room);
+			socket.emit('create', nickname, room);
 
 			socket.on('connect', () => {
 				/* 채팅 할 때*/
@@ -45,7 +45,7 @@
 			function msg_send() {
 				/* 메시지 전송 */
 				let message = $('#msg').val();
-				socket.emit('send', room, nickname, message);
+				socket.emit('send', nickname, message);
 				$('#msg').val('');
 				$('#chatList').append(`<div style="color:red;"> 나 : ${message}</div>`);
 			}

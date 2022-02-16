@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Chat, ChatDocument } from './schemas/chat.schema';
@@ -7,6 +11,7 @@ import { CreateChatDto } from './dto/create-chat.dto';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { JoinChatDto } from './dto/join-chat.dto';
 import { ChatRoom } from './interfaces/chat-room.interface';
+import { ChatMessage } from './interfaces/chat-message.interface';
 
 @Injectable()
 export class ChatsService {
@@ -52,8 +57,8 @@ export class ChatsService {
 
   async createMessage(createMessageDto: CreateMessageDto) {
     try {
-      const newMessage = new this.messageModel(createMessageDto);
-      return newMessage.save();
+      const Message = new this.messageModel(createMessageDto);
+      return Message.save();
     } catch (err) {
       console.log(err);
       throw new ConflictException('문제 발생');
@@ -71,5 +76,21 @@ export class ChatsService {
       .limit(limit)
       .skip(limit * (page - 1));
     return roomList;
+  }
+
+  async findUserInRoom(room: string, user: string): Promise<boolean> {
+    const data = await this.chatModel.findOne({ _id: room, 'user.name': user });
+    if (data) return true;
+    return false;
+  }
+
+  async findRoomMessage(room: string): Promise<ChatMessage[]> {
+    if (room.match(/^[0-9a-fA-F]{24}$/)) {
+      const data = await this.messageModel
+        .find({ _id: room }, ['_id', 'sender', 'message', 'createdAt'])
+        .sort({ createdAt: -1 });
+      return data;
+    }
+    throw new BadRequestException('잘못된 요청입니다.');
   }
 }

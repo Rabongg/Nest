@@ -11,7 +11,7 @@ export class Chat {
   @Prop(
     raw([
       {
-        name: { type: String, required: true, unique: true },
+        name: { type: String, required: true },
       },
     ]),
   )
