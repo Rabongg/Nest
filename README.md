@@ -5,10 +5,11 @@
 ### 필요조건
 + Node.js 16.X
 + yarn
-
++ .env.development or .env.test or .env.production
 ------------
-### 실행방법
+## 실행방법
 
+### Local에서 서버 실행
 ```
 $ yarn
 ```
@@ -19,7 +20,19 @@ $ yarn start:dev
 ```
 
 - swagger document
-http://localhost:7000/api
+[swagger 문서](http://localhost:7000/api)
+
+
+### docker로 실행
+- docker-compose 이용
+```
+docker-compose up -d
+```
+
+- Dockerfile 변경했을 시
+```
+docker-compose up -d build
+```
 
 ------------
 ## 연동
