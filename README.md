@@ -31,7 +31,7 @@ docker-compose up -d
 
 - Dockerfile 변경했을 시
 ```
-docker-compose up -d build
+docker-compose up -d --build
 ```
 
 ------------
